@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enkelt AR-rum</title>
+  
+  <!-- Bara A-Frame behövs. Vi använder version 1.4.2 -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <!-- Ladda in Troika för bättre texthantering -->
+  <script src="https://unpkg.com/aframe-troika-text/dist/aframe-troika-text.min.js"></script>
+</head>
+<body>
+
+  <!-- 
+    webxr="referenceSpaceType: local-floor" talar om för enheten 
+    att y=0 i vår 3D-värld ska vara det fysiska golvet.
+  -->
+  <a-scene webxr="referenceSpaceType: local-floor">
+    
+    <!-- Ladda in din bild här -->
+    <a-assets>
+      <img id="min-tavla1" src="images/bild1.png">
+      <img id="min-tavla2" src="images/bild2.png">
+      <img id="min-tavla3" src="images/bild3.png">
+      <img id="min-tavla4" src="images/bild4.png">
+      <img id="min-tavla5" src="images/bild5.png">
+      <img id="min-tavla6" src="images/bild6.png">
+      <img id="min-tavla7" src="images/bild7.png">
+      <img id="min-tavla8" src="images/bild8.png">
+      <img id="min-tavla9" src="images/bild9.png">
+      <img id="min-tavla10" src="images/bild10.png">
+      <img id="golv-textur" src="images/woodfloor.png">
+      <a-asset-item id="min_modell1" src="models/krydda/model.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- Kamera. I AR-läge tar telefonens gyroskop och djupkamera över styrningen helt. -->
+    <a-camera position="0 1.6 0">
+        <a-cursor 
+            fuse="false" 
+            raycaster="objects: .clickable" 
+            material="color: black; shader: flat">
+        </a-cursor>
+    </a-camera>
+
+    <!-- RUMMET (4x4 meter, 3 meter i takhöjd) -->
+    <!-- Startar centrerat runt användaren -->
+    <a-entity id="rum1">
+      
+      <!-- Golv -->
+      <a-plane position="0 0 0" rotation="-90 0 0" width="4" height="4" src="#golv-textur" repeat="4 4"></a-plane>
+
+      <!-- Tak -->
+      <a-plane position="0 3 0" rotation="90 0 0" width="4" height="4" color="#FAFAFA"></a-plane>
+
+      <!-- Vägg Norr (Framför användaren) -->
+      <a-plane position="0 1.5 -2" rotation="0 0 0" width="4" height="3" color="#F0F0F2">
+          <a-plane position="0 0 0.1" rotation="0 0 0" width="3" height="2" material="src: #min-tavla1"></a-plane>
+      </a-plane>
+
+      <!-- Vägg Söder (Bakom användaren)-->
+      <a-plane position="0 1.5 2" rotation="0 180 0" width="4" height="3" color="#F0F0F2">
+          <a-plane position="1 0 0.1" rotation="0 0 0" width="1.5" height="2" material="src: #min-tavla4"></a-plane>
+          <a-plane position="-1 0 0.1" rotation="0 0 0" width="1.5" height="2" material="src: #min-tavla3"></a-plane>
+      </a-plane>
+
+      <!-- Vägg Öster (Höger)-->
+      <a-plane position="2 1.5 0" rotation="0 -90 0" width="4" height="3" color="#F0F0F2">
+          <a-plane position="0 0 0.1" rotation="0 0 0" width="3" height="2" material="src: #min-tavla2"></a-plane>
+      </a-plane>
+
+      <!-- Vägg Väster (Vänster) -->
+      <a-plane position="-2 1.5 0" rotation="0 90 0" width="4" height="3" color="#F0F0F2">
+          <!-- 
+          KLICKBAR PORTAL (En dörrformad yta)
+          Vi drar fram den 1 cm (Z=0.01) och lägger till klassen 'clickable'.
+        -->
+        <a-plane 
+          id="portal-rum2"
+          class="clickable"
+          position="0 -0.5 0.01" 
+          width="1.2" 
+          height="2" 
+          color="#1C1C1E" 
+          material="shader: standard; metalness: 0.8; roughness: 0.2"
+          animation__mouseenter="property: material.color; from: #1C1C1E; to: #4CC3D9; startEvents: mouseenter; dur: 200"
+          animation__mouseleave="property: material.color; from: #4CC3D9; to: #1C1C1E; startEvents: mouseleave; dur: 200">
+          
+          <a-entity troika-text="value: GÅ TILL RUM 2; color: #FAFAFA; align: center; fontSize: 0.1" position="0 0.2 0.01"></a-entity>
+        </a-plane>
+        </a-plane>
+        
+        <a-glb-model 
+             src="#min_modell1" 
+             position="0 0 -1" 
+             scale="1 1 1" 
+             rotation="0 0 0">
+  </a-glb-model>
+
+    <!-- Allmänt omgivningsljus -->
+      <a-light type="ambient" color="#BBB"></a-light>
+    </a-entity>
+
+<!-- ################################################# -->
+    <!-- RUM 2  -->
+    <!-- ################################################# -->
+    <a-entity id="rum2" visible="false">
+      
+    <!-- Golv -->
+      <a-plane position="0 0 0" rotation="-90 0 0" width="4" height="4" src="#golv-textur" repeat="4 4"></a-plane>
+
+      <!-- Tak -->
+      <a-plane position="0 3 0" rotation="90 0 0" width="4" height="4" color="#FAFAFA"></a-plane>
+
+      <!-- Vägg Norr (Framför användaren) -->
+      <a-plane position="0 1.5 -2" rotation="0 0 0" width="4" height="3" color="#F0F0F2">
+            <a-plane position="1 0 0.1" rotation="0 0 0" width="1.5" height="2" material="src: #min-tavla5"></a-plane>
+            <a-plane position="-1 0 0.1" rotation="0 0 0" width="1.5" height="2" material="src: #min-tavla7"></a-plane>
+      </a-plane>
+
+      <!-- Vägg Söder (Bakom användaren)-->
+      <a-plane position="0 1.5 2" rotation="0 180 0" width="4" height="3" color="#F0F0F2">
+          <a-plane 
+          id="portal-rum3"
+          class="clickable"
+          position="0 -0.5 0.01" 
+          width="1.2" 
+          height="2" 
+          color="#1C1C1E" 
+          material="shader: standard; metalness: 0.8; roughness: 0.2"
+          animation__mouseenter="property: material.color; from: #1C1C1E; to: #4CC3D9; startEvents: mouseenter; dur: 200"
+          animation__mouseleave="property: material.color; from: #4CC3D9; to: #1C1C1E; startEvents: mouseleave; dur: 200">
+          
+          <a-entity troika-text="value: GÅ TILL RUM 3; color: #FAFAFA; align: center; fontSize: 0.1" position="0 0.2 0.01"></a-entity>
+        </a-plane>
+      </a-plane>
+
+      <!-- Vägg Öster (Höger)-->
+      <a-plane position="2 1.5 0" rotation="0 -90 0" width="4" height="3" color="#F0F0F2">
+           <a-plane 
+          id="portal-rum1"
+          class="clickable"
+          position="0 -0.5 0.01" 
+          width="1.2" 
+          height="2" 
+          color="#1C1C1E" 
+          material="shader: standard; metalness: 0.8; roughness: 0.2"
+          animation__mouseenter="property: material.color; from: #1C1C1E; to: #4CC3D9; startEvents: mouseenter; dur: 200"
+          animation__mouseleave="property: material.color; from: #4CC3D9; to: #1C1C1E; startEvents: mouseleave; dur: 200">
+          
+          <a-entity troika-text="value: GÅ TILL RUM 1; color: #FAFAFA; align: center; fontSize: 0.1" position="0 0.2 0.01"></a-entity>
+        </a-plane>
+      </a-plane>
+
+      <!-- Vägg Väster (Vänster) -->
+      <a-plane position="-2 1.5 0" rotation="0 90 0" width="4" height="3" color="#F0F0F2">
+          <a-plane position="0 0 0.1" rotation="0 0 0" width="3" height="2" material="src: #min-tavla6"></a-plane>
+      </a-plane>
+      
+          <!-- Allmänt omgivningsljus -->
+      <a-light type="ambient" color="#BBB"></a-light>
+      
+    </a-entity>
+    <!-- ################################################# -->
+    <!-- RUM 3  -->
+    <!-- ################################################# -->
+    <a-entity id="rum3" visible="false">
+      
+    <!-- Golv -->
+      <a-plane position="0 0 0" rotation="-90 0 0" width="4" height="4" src="#golv-textur" repeat="4 4"></a-plane>
+
+      <!-- Tak -->
+      <a-plane position="0 3 0" rotation="90 0 0" width="4" height="4" color="#FAFAFA"></a-plane>
+
+      <!-- Vägg Norr (Framför användaren) -->
+      <a-plane position="0 1.5 -2" rotation="0 0 0" width="4" height="3" color="#F0F0F2">
+          <a-plane 
+          id="portal-rum2-fran-rum3"
+          class="clickable"
+          position="0 -0.5 0.01" 
+          width="1.2" 
+          height="2" 
+          color="#1C1C1E" 
+          material="shader: standard; metalness: 0.8; roughness: 0.2"
+          animation__mouseenter="property: material.color; from: #1C1C1E; to: #4CC3D9; startEvents: mouseenter; dur: 200"
+          animation__mouseleave="property: material.color; from: #4CC3D9; to: #1C1C1E; startEvents: mouseleave; dur: 200">
+          
+          <a-entity troika-text="value: GÅ TILL RUM 2; color: #FAFAFA; align: center; fontSize: 0.1" position="0 0.2 0.01"></a-entity>
+        </a-plane>
+      </a-plane>
+
+      <!-- Vägg Söder (Bakom användaren)-->
+      <a-plane position="0 1.5 2" rotation="0 180 0" width="4" height="3" color="#F0F0F2">
+          <a-plane position="0 0 0.1" rotation="0 0 0" width="3" height="2" material="src: #min-tavla9"></a-plane>
+      </a-plane>
+
+      <!-- Vägg Öster (Höger)-->
+      <a-plane position="2 1.5 0" rotation="0 -90 0" width="4" height="3" color="#F0F0F2">
+            <a-plane position="1 0 0.1" rotation="0 0 0" width="1.5" height="2" material="src: #min-tavla8"></a-plane>
+            <a-plane position="-1 0 0.1" rotation="0 0 0" width="1.5" height="2" material="src: #min-tavla10"></a-plane>
+      </a-plane>
+
+      <!-- Vägg Väster (Vänster) -->
+        <a-plane position="-2 1.5 0" rotation="0 90 0" width="4" height="3" color="#F0F0F2">
+            <a-entity troika-text="value: KONSTVERK AV\nMIDEA AMIN; color: #FAFAFA; align: center; fontSize: 0.3" position="0 0 0.01"></a-entity> 
+        </a-plane>
+      
+          <!-- Allmänt omgivningsljus -->
+      <a-light type="ambient" color="#BBB"></a-light>
+      
+    </a-entity>
+  </a-scene>
+  
+  <!-- JAVASCRIPT: Logiken för rumsskiftet -->
+<script>
+    // 1. Hämta elementen från scenen
+    const portalTillRum1 = document.getElementById('portal-rum1');
+    const portalTillRum2FranRum1 = document.getElementById('portal-rum2');
+    const portalTillRum2FranRum3 = document.getElementById('portal-rum2-fran-rum3'); // Den nya portalen!
+    const portalTillRum3 = document.getElementById('portal-rum3');
+    
+    // 2. Lyssna på klickhändelser
+
+    // Från Rum 1 -> Rum 2
+    portalTillRum2FranRum1.addEventListener('click', function () {
+        document.getElementById('rum1').setAttribute('visible', 'false'); 
+        document.getElementById('rum2').setAttribute('visible', 'true');   
+    });
+
+    // Från Rum 3 -> Rum 2 (NY!)
+    portalTillRum2FranRum3.addEventListener('click', function () {
+        document.getElementById('rum3').setAttribute('visible', 'false'); 
+        document.getElementById('rum2').setAttribute('visible', 'true');   
+    });
+
+    // Från Rum 2 -> Rum 1
+    portalTillRum1.addEventListener('click', function () {
+        document.getElementById('rum2').setAttribute('visible', 'false');  
+        document.getElementById('rum1').setAttribute('visible', 'true'); 
+    });
+
+    // Från Rum 2 -> Rum 3
+    portalTillRum3.addEventListener('click', function () {
+        document.getElementById('rum2').setAttribute('visible', 'false');  
+        document.getElementById('rum3').setAttribute('visible', 'true'); 
+    });
+  </script>
+  
+  
+</body>
+</html>
