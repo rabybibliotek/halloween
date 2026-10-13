@@ -6,7 +6,7 @@
   <title>Spökjakt</title>
   
   <!-- Bara A-Frame behövs. Vi använder version 1.4.2 -->
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
   <!-- Ladda in Troika för bättre texthantering -->
   <script src="https://unpkg.com/aframe-troika-text/dist/aframe-troika-text.min.js"></script>
 </head>
@@ -66,15 +66,15 @@
           width="0.5" 
           height="0.5" 
           material="src: #min-tavla2">
-        <a-plane 
+       
+        
+          <!--  <a-plane 
           id="ghost"
           visible="true"
           position="1 -1 0.1" 
           width="0.5" 
           height="1" 
           material="src: #mark">
-        
-          <!-- 
           KLICKBAR PORTAL (En dörrformad yta)
           Vi drar fram den 1 cm (Z=0.01) och lägger till klassen 'clickable'.
         <a-plane 
@@ -218,23 +218,14 @@
   <!-- JAVASCRIPT: Logiken för rumsskiftet -->
 <script>
     // 1. Hämta elementen från scenen
-    const monster1 = document.getElementById('monster1');
+
     const portalTillRum1 = document.getElementById('portal-rum1');
     const portalTillRum2FranRum1 = document.getElementById('portal-rum2');
     const portalTillRum2FranRum3 = document.getElementById('portal-rum2-fran-rum3'); // Den nya portalen!
     const portalTillRum3 = document.getElementById('portal-rum3');
     
     // 2. Lyssna på klickhändelser
-  
-      monster1.addEventListener('click', function () {
-        document.getElementById('ghost').setAttribute('visible', 'true');
-        setTimeout(() => {
-        console.log("Waited 3 seconds!");
-        }, 3000); 
-        document.getElementById('rum2').setAttribute('visible', 'false');
-      });
-    
-  
+   
     // Från Rum 1 -> Rum 2
     portalTillRum2FranRum1.addEventListener('click', function () {
         document.getElementById('rum1').setAttribute('visible', 'false'); 
