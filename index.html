@@ -65,7 +65,13 @@
 
       <!-- Vägg Väster (Vänster) -->
       <a-plane position="-2 1.5 0" rotation="0 90 0" width="4" height="3" src="#spokjakt">
-        <a-plane position="0.5 -1 0.1" width="0.5" height="0.5" material="src: #min-tavla2">
+        <a-plane 
+          id="monster1"
+          class="clickable"
+          position="0.5 -1 0.1" 
+          width="0.5" 
+          height="0.5" 
+          material="src: #min-tavla2">
 
         
           <!-- 
@@ -212,13 +218,23 @@
   <!-- JAVASCRIPT: Logiken för rumsskiftet -->
 <script>
     // 1. Hämta elementen från scenen
+    const monster1 = document.getElementById('monster1');
     const portalTillRum1 = document.getElementById('portal-rum1');
     const portalTillRum2FranRum1 = document.getElementById('portal-rum2');
     const portalTillRum2FranRum3 = document.getElementById('portal-rum2-fran-rum3'); // Den nya portalen!
     const portalTillRum3 = document.getElementById('portal-rum3');
     
     // 2. Lyssna på klickhändelser
-
+  
+      monster1.addEventListener('click', function () {
+        document.getElementById('rum2').setAttribute('visible', 'true');
+        setTimeout(() => {
+        console.log("Waited 3 seconds!");
+        }, 3000); 
+        document.getElementById('rum2').setAttribute('visible', 'false');
+      });
+    
+  
     // Från Rum 1 -> Rum 2
     portalTillRum2FranRum1.addEventListener('click', function () {
         document.getElementById('rum1').setAttribute('visible', 'false'); 
